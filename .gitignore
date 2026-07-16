@@ -1,0 +1,16 @@
+# Local-only working area — drafts, source assets, scratch notes.
+# Nothing in here is pushed, so it never shows up on the profile page.
+/_local/
+/drafts/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+.idea/
+.vscode/
+
+# Tooling artifacts (in case any is added later)
+node_modules/
+*.log
