@@ -26,7 +26,6 @@
 
 <p align="center">
   <img height="200" src="./profile-summary-card-output/nord_dark/3-stats.svg" alt="Chance's GitHub stats" />
-  <img height="200" src="./profile-summary-card-output/nord_dark/1-repos-per-language.svg" alt="Repos per language" />
 </p>
 
 <p align="center">
