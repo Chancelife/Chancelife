@@ -33,5 +33,5 @@
 </p>
 
 <p align="center">
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=Chancelife&bg_color=0A1633&color=C7D0E8&line=3B6BB0&point=B7995B&area=true&area_color=2A4B8D&title_color=B7995B&hide_border=true" alt="Contribution graph" />
+  <img src="./assets/weekly-contributions.svg" alt="Weekly contributions in 2026" />
 </p>
