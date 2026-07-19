@@ -31,32 +31,7 @@
 </p>
 
 <p align="center">
-  <b>Frameworks</b>
-  <br/>
-  <img src="https://img.shields.io/badge/LangChain-2A4B8D?style=flat-square&logo=langchain&logoColor=B7995B" alt="LangChain" />
-  <img src="https://img.shields.io/badge/LangGraph-2A4B8D?style=flat-square&logo=langgraph&logoColor=B7995B" alt="LangGraph" />
-  <img src="https://img.shields.io/badge/OpenAI%20SDK-2A4B8D?style=flat-square&logo=openai&logoColor=B7995B" alt="OpenAI SDK" />
-  <img src="https://img.shields.io/badge/n8n-2A4B8D?style=flat-square&logo=n8n&logoColor=B7995B" alt="n8n" />
-</p>
-
-<p align="center">
-  <b>Agents</b>
-  <br/>
-  <img src="https://img.shields.io/badge/Claude%20Code-2A4B8D?style=flat-square&logo=claude&logoColor=B7995B" alt="Claude Code" />
-  <img src="https://img.shields.io/badge/Codex-2A4B8D?style=flat-square&logo=openai&logoColor=B7995B" alt="Codex" />
-  <img src="https://img.shields.io/badge/Kimi%20Code-2A4B8D?style=flat-square&logo=moonshot&logoColor=B7995B" alt="Kimi Code" />
-  <img src="https://img.shields.io/badge/Cline-2A4B8D?style=flat-square&logo=cline&logoColor=B7995B" alt="Cline" />
-  <img src="https://img.shields.io/badge/Pi-2A4B8D?style=flat-square" alt="Pi" />
-  <img src="https://img.shields.io/badge/Druid-2A4B8D?style=flat-square" alt="Druid" />
-  <img src="https://img.shields.io/badge/OpenClaw-2A4B8D?style=flat-square" alt="OpenClaw" />
-</p>
-
-<p align="center">
-  <b>Retired</b>
-  <br/>
-  <img src="https://img.shields.io/badge/Trae-3D4468?style=flat-square" alt="Trae" />
-  <img src="https://img.shields.io/badge/Dify-3D4468?style=flat-square&logo=dify&logoColor=8892B8" alt="Dify" />
-  <img src="https://img.shields.io/badge/Gemini%20CLI-3D4468?style=flat-square&logo=googlegemini&logoColor=8892B8" alt="Gemini CLI" />
+  <img src="./assets/agent-stack.svg" alt="The Fleet — Frameworks: LangChain, LangGraph, OpenAI SDK, n8n · Agents: Claude Code, Codex, Kimi Code, Cline, Pi, Druid, OpenClaw · Retired: Trae, Dify, Gemini CLI" />
 </p>
 
 <br/>
