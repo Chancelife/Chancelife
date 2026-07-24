@@ -39,7 +39,7 @@
 <h3 align="center">📊 GitHub Stats</h3>
 
 <p align="center">
-  <img height="200" src="./profile-summary-card-output/nord_dark/3-stats.svg" alt="Chance's GitHub stats" />
+  <img height="200" src="./assets/stats-card.svg" alt="Chance's GitHub stats" />
 </p>
 
 <p align="center">
