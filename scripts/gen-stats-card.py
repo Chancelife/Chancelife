@@ -19,6 +19,10 @@ import argparse
 import json
 import os
 import subprocess
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _backup import add_backup_args, maybe_snapshot  # noqa: E402
 
 # --- lapis theme (shared with gen-weekly-contrib.py) -----------------------
 BG = "#0A1633"        # surface
@@ -174,6 +178,7 @@ def main():
     ap.add_argument("--login", default="Chancelife")
     ap.add_argument("--year", default=str(dt.date.today().year))
     ap.add_argument("--out", default="assets/stats-card.svg")
+    add_backup_args(ap)
     args = ap.parse_args()
 
     s = fetch(args.login)
@@ -185,6 +190,7 @@ def main():
     print(f"wrote {args.out}: stars={s['stars']} commits={s['commits']} "
           f"prs={s['prs']} issues={s['issues']} contributed={s['contributed']} "
           f"rank={letter} (top {pct:.0f}%)")
+    maybe_snapshot(args)
 
 
 if __name__ == "__main__":

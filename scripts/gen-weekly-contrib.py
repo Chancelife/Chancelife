@@ -15,7 +15,12 @@ Requires: `gh auth login` (uses your token for the GraphQL call).
 import argparse
 import datetime as dt
 import json
+import os
 import subprocess
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _backup import add_backup_args, maybe_snapshot  # noqa: E402
 
 # --- lapis theme -----------------------------------------------------------
 BG = "#0A1633"        # surface
@@ -165,17 +170,18 @@ def main():
     ap.add_argument("--from", dest="dfrom", default=f"{today.year}-01-01")
     ap.add_argument("--to", dest="dto", default=today.isoformat())
     ap.add_argument("--out", default="assets/weekly-contributions.svg")
+    add_backup_args(ap)
     args = ap.parse_args()
 
     weeks, total = fetch_weeks(args.login, args.dfrom, args.dto)
     year = args.dfrom[:4]
     svg = render(weeks, total, year, args.dto)
 
-    import os
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     with open(args.out, "w", encoding="utf-8", newline="\n") as f:
         f.write(svg + "\n")
     print(f"wrote {args.out}: {len(weeks)} weeks, {total} total, peak {max(v for _,v in weeks)}")
+    maybe_snapshot(args)
 
 
 if __name__ == "__main__":

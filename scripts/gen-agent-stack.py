@@ -13,6 +13,11 @@ Logo paths are from simple-icons (github.com/simple-icons/simple-icons),
 CC0-1.0, each normalised to a 24x24 viewBox.
 """
 import argparse
+import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _backup import add_backup_args, maybe_snapshot  # noqa: E402
 
 # --- lapis theme -----------------------------------------------------------
 BG = "#0A1633"          # page surface (transparent card, so this is unused fill)
@@ -168,14 +173,15 @@ def render():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="assets/agent-stack.svg")
+    add_backup_args(ap)
     args = ap.parse_args()
 
     svg = render()
-    import os
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     with open(args.out, "w", encoding="utf-8", newline="\n") as f:
         f.write(svg + "\n")
     print(f"wrote {args.out}")
+    maybe_snapshot(args)
 
 
 if __name__ == "__main__":
