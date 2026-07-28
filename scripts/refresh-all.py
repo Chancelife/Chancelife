@@ -20,6 +20,7 @@ GENERATORS = [
     "scripts/gen-stats-card.py",
     "scripts/gen-weekly-contrib.py",
     "scripts/gen-agent-stack.py",
+    "scripts/gen-model-fleet.py",
 ]
 
 

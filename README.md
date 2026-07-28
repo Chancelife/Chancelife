@@ -31,7 +31,15 @@
 </p>
 
 <p align="center">
-  <img src="./assets/agent-stack.svg" alt="The Fleet — Frameworks: LangChain, LangGraph, OpenAI SDK, n8n · Agents: Claude Code, Codex, Kimi Code, Cline, Pi, Druid, OpenClaw · Retired: Trae, Dify, Gemini CLI" />
+  <img src="./assets/agent-stack.svg" alt="The Fleet — Frameworks: LangChain, LangGraph, OpenAI SDK · Agents: Claude Code, Codex, Kimi Code, Cline, OpenCode, Pi, Druid, OpenClaw · Retired: Trae, Dify, Gemini CLI, Kimi CLI, n8n" />
+</p>
+
+<br/>
+
+<h3 align="center">🧠 Model Arsenal</h3>
+
+<p align="center">
+  <img src="./assets/model-fleet.svg" alt="Model Arsenal — Anthropic: Sonnet 4.8, Sonnet 5, Claude 4.8, Claude 5 · Kimi: Kimi 2.7, Kimi 2.7 High Speed · OpenAI/Codex: GPT 5.5, GPT 5.6 Sol, GPT 5.6 Terra · Qwen: first batch testing" />
 </p>
 
 <br/>
