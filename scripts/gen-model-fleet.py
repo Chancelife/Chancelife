@@ -60,13 +60,13 @@ ICONS = {
 # (plan just purchased, first test sessions).
 PROVIDERS = [
     {"name": "Anthropic", "icon": "claude",
-     "models": ["Sonnet 4.8", "Sonnet 5", "Claude 4.8", "Claude 5"]},
-    {"name": "Kimi", "icon": "kimi",
-     "models": ["Kimi 2.7", "Kimi 2.7 High Speed"]},
+     "models": ["Claude 5", "Claude 4.8", "Sonnet 5", "Sonnet 4.8"]},
     {"name": "OpenAI", "icon": "openai",
-     "models": ["GPT 5.5", "GPT 5.6 Sol", "GPT 5.6 Terra"]},
+     "models": ["GPT 5.6 Sol", "GPT 5.6 Terra", "GPT 5.5"]},
+    {"name": "Kimi", "icon": "kimi",
+     "models": ["Kimi K3", "Kimi 2.7", "Kimi 2.7 High Speed"]},
     {"name": "Qwen", "icon": "qwen", "new": True,
-     "models": ["首批测试"]},
+     "models": ["Early Access"]},
 ]
 
 # --- geometry ---------------------------------------------------------------
