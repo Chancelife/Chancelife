@@ -39,7 +39,7 @@
 <h3 align="center">🧠 Model Arsenal</h3>
 
 <p align="center">
-  <img src="./assets/model-fleet.svg" alt="Model Arsenal — Anthropic: Sonnet 4.8, Sonnet 5, Claude 4.8, Claude 5 · Kimi: Kimi 2.7, Kimi 2.7 High Speed · OpenAI/Codex: GPT 5.5, GPT 5.6 Sol, GPT 5.6 Terra · Qwen: first batch testing" />
+  <img src="./assets/model-fleet.svg" alt="Model Arsenal — Anthropic: Claude 5, Claude 4.8, Sonnet 5, Sonnet 4.8 · OpenAI: GPT 5.6 Sol, GPT 5.6 Terra, GPT 5.5 · Kimi: Kimi K3, Kimi 2.7, Kimi 2.7 High Speed · Qwen: Early Access" />
 </p>
 
 <br/>
