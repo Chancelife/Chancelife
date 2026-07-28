@@ -49,7 +49,6 @@ ROWS = [
         ("LangChain", "langchain"),
         ("LangGraph", "langgraph"),
         ("OpenAI SDK", "openai"),
-        ("n8n", "n8n"),
     ]),
     ("Agents", False, [
         ("Claude Code", "claude"),
@@ -64,6 +63,8 @@ ROWS = [
         ("Trae", None),
         ("Dify", "dify"),
         ("Gemini CLI", "gemini"),
+        ("Kimi CLI", "kimi"),
+        ("n8n", "n8n"),
     ]),
 ]
 
