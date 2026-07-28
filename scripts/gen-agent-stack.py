@@ -1,16 +1,26 @@
 #!/usr/bin/env python3
-"""Generate a static, self-contained Agent Stack badge strip SVG.
+"""Generate a static, self-contained "The Fleet" agent-stack card SVG.
 
-Renders the Fleet (Frameworks / Agents / Retired) as one lapis-themed SVG with
-the brand logos inlined as vector paths — zero external runtime dependency, so
-it can never 503 the way shields.io's logo endpoint does.
+Renders the Fleet (Frameworks / Agents / Retired) as one lapis-themed card in
+the EXACT same design language as gen-model-fleet.py — bordered surface with a
+starfield + radial glow, a brushed-metal gold top edge, gradient gem tiles and
+raised badges, a sparkle title with a tracked subtitle, right-aligned per-row
+status pills (LIVE / RETIRED) tied to short rows by a dashed guide line, and a
+soft pulse on the live dots. Zero external runtime dependency.
 
-Static by design: edit ROWS / ICONS below and re-run to refresh.
+The matrix skeleton mirrors model-fleet (left category column + right content
+column + row structure), but each category's badge flow wraps inside its row so
+the dense Agents roster stays narrow and the card width rhymes with the model
+card instead of ballooning. The left tile + name are vertically centred across
+a category's wrapped lines; the status pill anchors to the first line.
+
+Static by design: edit ROWS below and re-run to refresh.
 
     python scripts/gen-agent-stack.py
 
-Logo paths are from simple-icons (github.com/simple-icons/simple-icons),
-CC0-1.0, each normalised to a 24x24 viewBox.
+Brand logos (the small glyph inside each badge) are from simple-icons
+(github.com/simple-icons/simple-icons), CC0-1.0, each on a 24x24 viewBox.
+Category glyphs (the gem-tile mark) are hand-drawn.
 """
 import argparse
 import os
@@ -19,14 +29,23 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from _backup import add_backup_args, maybe_snapshot  # noqa: E402
 
-# --- lapis theme -----------------------------------------------------------
-BG = "#0A1633"          # page surface (transparent card, so this is unused fill)
-ACTIVE_BG = "#2A4B8D"   # active badge fill
-ACTIVE_TX = "#DCE3F5"   # active badge label
-GOLD = "#B7995B"        # active badge logo
-RETIRED_BG = "#3D4468"  # retired badge fill
-RETIRED_TX = "#8892B8"  # retired badge label + logo
-HEADER = "#C7D0E8"      # section header ink
+# --- lapis theme (shared with gen-stats-card.py / gen-model-fleet.py) -------
+BG = "#0A1633"          # card surface
+BORDER = "#1E2A54"      # card border / live-pill stroke
+TILE_TOP = "#34599F"    # active gem-tile gradient top
+TILE_BOT = "#21407A"    # active gem-tile gradient bottom
+CHIP_TOP = "#3358A0"    # active badge gradient top
+CHIP_BOT = "#244179"    # active badge gradient bottom
+CHIP_TX = "#DCE3F5"     # active badge label
+RTILE_TOP = "#2C3358"   # retired gem-tile gradient top
+RTILE_BOT = "#222845"   # retired gem-tile gradient bottom
+RCHIP_TOP = "#2A3052"   # retired badge gradient top
+RCHIP_BOT = "#212742"   # retired badge gradient bottom
+RTX = "#8892B8"         # retired label + glyph + pill text
+GOLD = "#B7995B"        # active glyph, accents, title sparkle
+BLUE = "#3B6BB0"        # ambient glow
+INK = "#C7D0E8"         # category names, title
+INK_MUTED = "#7A88B8"   # subtitle, live label, guide line
 FONT = ("-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,"
         "Arial,sans-serif")
 
@@ -43,14 +62,17 @@ ICONS = {
     "gemini": "M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81",
 }
 
-# (label, icon-key or None). Rows rendered top to bottom.
+SPARKLE = ("M12 0c.9 6.3 5.7 11.1 12 12-6.3.9-11.1 5.7-12 12"
+           "-.9-6.3-5.7-11.1-12-12C6.3 11.1 11.1 6.3 12 0Z")
+
+# (name, retired, category-glyph-key, [(label, brand-icon-key or None), ...])
 ROWS = [
-    ("Frameworks", False, [
+    ("Frameworks", False, "frameworks", [
         ("LangChain", "langchain"),
         ("LangGraph", "langgraph"),
         ("OpenAI SDK", "openai"),
     ]),
-    ("Agents", False, [
+    ("Agents", False, "agents", [
         ("Claude Code", "claude"),
         ("Codex", "openai"),
         ("Kimi Code", "kimi"),
@@ -60,28 +82,40 @@ ROWS = [
         ("Druid", None),
         ("OpenClaw", None),
     ]),
-    ("Retired", True, [
+    ("Retired", True, "retired", [
         ("Trae", None),
-        ("Dify", "dify"),
+        ("Dify", None),
         ("Gemini CLI", "gemini"),
         ("Kimi CLI", "kimi"),
         ("n8n", "n8n"),
     ]),
 ]
 
-# --- geometry --------------------------------------------------------------
+# --- geometry ---------------------------------------------------------------
 FS = 11          # badge label font-size
-HFS = 13         # section-header font-size
+TITLE_FS = 18
+SUB_FS = 9       # subtitle font-size
+NAME_FS = 13     # category name font-size
+STAT_FS = 9      # status pill font-size
+L = 28           # left margin
+R = 28           # right margin
+TILE = 22        # category gem-tile size
+GLYPH = 13       # glyph box inside a tile
+ICON = 13        # brand-logo box inside a badge
+ICON_GAP = 5     # gap between brand logo and label
 BADGE_H = 22
 RX = 4
 PAD_X = 9        # horizontal padding inside a badge
-ICON = 13        # icon box size
-ICON_GAP = 5     # gap between icon and label
 BADGE_GAP = 8    # gap between badges in a row
-HEADER_GAP = 9   # gap between header baseline area and its badge row
-ROW_GAP = 20     # gap between one row's badges and the next header
-PAD_TOP = 6
-PAD_BOTTOM = 6
+WRAP_GAP = 8     # gap between wrapped lines within a category
+ROW_GAP = 24     # gap between categories
+ROW0 = 74        # first category top (title + subtitle sit above)
+NAME_X = L + TILE + 9
+NAME_W = 86      # reserved category-name column
+CHIP_X = NAME_X + NAME_W + 14
+STATUS_GAP = 14  # breathing room between badge flow and status pill
+GUIDE_MIN = 12   # min gap before drawing the dashed guide line
+W = 644          # fixed canvas width (wrapping keeps the dense rows inside it)
 
 
 def char_w(ch):
@@ -111,65 +145,242 @@ def badge_w(label, has_icon):
     return w
 
 
-def render():
-    # measure every row's total width to size the canvas
-    row_layouts = []
-    max_row_w = 0
-    for header, retired, items in ROWS:
-        widths = [badge_w(lbl, ic is not None) for lbl, ic in items]
-        total = sum(widths) + BADGE_GAP * (len(items) - 1)
-        row_layouts.append((header, retired, items, widths, total))
-        max_row_w = max(max_row_w, total, text_w(header, HFS))
+def status_w(label):
+    return 7 + 5 + 4 + text_w(label, STAT_FS) + 8
 
-    W = int(round(max_row_w + 40))          # side margins
-    cx = W / 2
+
+LIVE_W = status_w("LIVE")
+RETIRED_W = status_w("RETIRED")
+STATUS_RESERVE = max(LIVE_W, RETIRED_W)
+STATUS_RIGHT = W - R
+STATUS_LEFT = STATUS_RIGHT - STATUS_RESERVE
+AVAIL1 = STATUS_LEFT - CHIP_X - STATUS_GAP   # first line yields to the pill
+AVAILN = (W - R) - CHIP_X                    # continuation lines use full width
+
+
+def wrap(items):
+    """Greedy line-wrap of a badge list. First line is narrower (pill sits at
+    its right edge); later lines use the full content width."""
+    widths = [badge_w(lbl, ic is not None) for lbl, ic in items]
+    lines, cur, cur_w = [], [], 0.0
+    for it, bw in zip(items, widths):
+        avail = AVAIL1 if not lines else AVAILN
+        add = bw if not cur else bw + BADGE_GAP
+        if cur and cur_w + add > avail:
+            lines.append(cur)
+            cur, cur_w = [], 0.0
+            add = bw
+        cur.append((it, bw))
+        cur_w += add
+    if cur:
+        lines.append(cur)
+    return lines, widths
+
+
+def line_right(line):
+    return sum(bw for _, bw in line) + BADGE_GAP * (len(line) - 1)
+
+
+def cat_glyph(key, x, y, size, color):
+    """Hand-drawn category mark in a 24x24 space, placed via transform."""
+    s = size / 24.0
+    if key == "frameworks":
+        shapes = "".join(
+            f'<rect x="{gx}" y="{gy}" width="9" height="9" rx="2" '
+            f'fill="{color}"/>'
+            for gx, gy in [(2, 2), (13, 2), (2, 13), (13, 13)]
+        )
+    elif key == "agents":
+        shapes = f'<path d="{SPARKLE}" fill="{color}"/>'
+    else:  # retired — archive box
+        shapes = (
+            f'<rect x="2" y="4" width="20" height="4" rx="1.5" fill="{color}"/>'
+            f'<rect x="4" y="9" width="3" height="11" fill="{color}"/>'
+            f'<rect x="17" y="9" width="3" height="11" fill="{color}"/>'
+            f'<rect x="4" y="17" width="16" height="3" rx="1.5" fill="{color}"/>'
+            f'<rect x="9" y="12" width="6" height="2" rx="1" fill="{color}"/>'
+        )
+    return (f'<g transform="translate({x:.1f},{y:.1f}) scale({s:.4f})">'
+            f'{shapes}</g>')
+
+
+def status_pill(x, y, retired):
+    w = RETIRED_W if retired else LIVE_W
+    h = 18
+    ty = y + (BADGE_H - h) / 2
+    cy = ty + h / 2
+    dot_cx = x + 7 + 2.5
+    if retired:
+        fill, stroke, dot_cls, dot_fill, tx = "#141B33", "#2A3052", "", RTX, RTX
+        label = "RETIRED"
+    else:
+        fill, stroke, dot_cls, dot_fill, tx = BG, BORDER, "as-live", GOLD, INK_MUTED
+        label = "LIVE"
+    cls = f' class="{dot_cls}"' if dot_cls else ""
+    return "\n".join([
+        f'<rect x="{x:.1f}" y="{ty:.1f}" width="{w:.1f}" height="{h}" '
+        f'rx="{RX}" fill="{fill}" stroke="{stroke}"/>',
+        f'<circle{cls} cx="{dot_cx:.1f}" cy="{cy:.1f}" r="2.3" '
+        f'fill="{dot_fill}"/>',
+        f'<text x="{x + 16:.1f}" y="{cy + 3.2:.1f}" fill="{tx}" '
+        f'font-size="{STAT_FS}" font-weight="700">{label}</text>',
+    ])
+
+
+def render():
+    groups = []
+    for name, retired, ckey, items in ROWS:
+        lines, widths = wrap(items)
+        groups.append((name, retired, ckey, items, lines, widths))
+
+    group_tops, group_hs = [], []
+    top = ROW0
+    for *_rest, lines, _w in groups:
+        group_tops.append(top)
+        h = len(lines) * BADGE_H + (len(lines) - 1) * WRAP_GAP
+        group_hs.append(h)
+        top += h + ROW_GAP
+    H = top - ROW_GAP + 20
 
     out = [
-        f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" '
-        f'height="__H__" viewBox="0 0 {W} __H__" font-family="{FONT}">'
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" '
+        f'viewBox="0 0 {W} {H}" font-family="{FONT}">',
+        "<defs>",
+        '<radialGradient id="asGlow" cx="12%" cy="-10%" r="95%">',
+        f'<stop offset="0%" stop-color="{BLUE}" stop-opacity="0.22"/>',
+        f'<stop offset="55%" stop-color="{BLUE}" stop-opacity="0.05"/>',
+        f'<stop offset="100%" stop-color="{BLUE}" stop-opacity="0"/>',
+        "</radialGradient>",
+        '<linearGradient id="asTop" x1="0" y1="0" x2="1" y2="0">',
+        f'<stop offset="0%" stop-color="{GOLD}" stop-opacity="0"/>',
+        f'<stop offset="50%" stop-color="{GOLD}" stop-opacity="0.6"/>',
+        f'<stop offset="100%" stop-color="{GOLD}" stop-opacity="0"/>',
+        "</linearGradient>",
+        '<linearGradient id="asTile" x1="0" y1="0" x2="0" y2="1">',
+        f'<stop offset="0%" stop-color="{TILE_TOP}"/>',
+        f'<stop offset="100%" stop-color="{TILE_BOT}"/>',
+        "</linearGradient>",
+        '<linearGradient id="asChip" x1="0" y1="0" x2="0" y2="1">',
+        f'<stop offset="0%" stop-color="{CHIP_TOP}"/>',
+        f'<stop offset="100%" stop-color="{CHIP_BOT}"/>',
+        "</linearGradient>",
+        '<linearGradient id="asTileR" x1="0" y1="0" x2="0" y2="1">',
+        f'<stop offset="0%" stop-color="{RTILE_TOP}"/>',
+        f'<stop offset="100%" stop-color="{RTILE_BOT}"/>',
+        "</linearGradient>",
+        '<linearGradient id="asChipR" x1="0" y1="0" x2="0" y2="1">',
+        f'<stop offset="0%" stop-color="{RCHIP_TOP}"/>',
+        f'<stop offset="100%" stop-color="{RCHIP_BOT}"/>',
+        "</linearGradient>",
+        '<pattern id="asDots" width="22" height="22" patternUnits="userSpaceOnUse">',
+        f'<circle cx="2" cy="2" r="0.7" fill="{INK}" opacity="0.05"/>',
+        "</pattern>",
+        '<clipPath id="asClip">'
+        f'<rect x="0.5" y="0.5" width="{W-1}" height="{H-1}" rx="6"/>'
+        "</clipPath>",
+        "</defs>",
+        "<style>"
+        "@keyframes asLive{0%,100%{opacity:1}50%{opacity:.5}}"
+        ".as-live{animation:asLive 3.4s ease-in-out infinite}"
+        "</style>",
+        f'<rect x="0.5" y="0.5" width="{W-1}" height="{H-1}" rx="6" '
+        f'fill="{BG}" stroke="{BORDER}"/>',
+        '<g clip-path="url(#asClip)">',
+        f'<rect x="0" y="0" width="{W}" height="{H}" fill="url(#asDots)"/>',
+        f'<rect x="0" y="0" width="{W}" height="{H}" fill="url(#asGlow)"/>',
+        f'<rect x="1" y="1" width="{W-2}" height="1.5" fill="url(#asTop)"/>',
+        "</g>",
     ]
 
-    y = PAD_TOP
-    for header, retired, items, widths, total in row_layouts:
-        # section header, centered
-        y += HFS
-        out.append(
-            f'<text x="{cx:.1f}" y="{y:.1f}" fill="{HEADER}" font-size="{HFS}" '
-            f'font-weight="700" text-anchor="middle">{header}</text>'
-        )
-        y += HEADER_GAP
-        # badge row, centered
-        bg = RETIRED_BG if retired else ACTIVE_BG
-        tx = RETIRED_TX if retired else ACTIVE_TX
-        logo_c = RETIRED_TX if retired else GOLD
-        x = cx - total / 2
-        by = y
-        for (lbl, ic), bw in zip(items, widths):
-            out.append(
-                f'<rect x="{x:.1f}" y="{by:.1f}" width="{bw:.1f}" '
-                f'height="{BADGE_H}" rx="{RX}" fill="{bg}"/>'
-            )
-            inner = x + PAD_X
-            if ic:
-                scale = ICON / 24.0
-                iy = by + (BADGE_H - ICON) / 2
-                out.append(
-                    f'<g transform="translate({inner:.1f},{iy:.1f}) '
-                    f'scale({scale:.4f})"><path d="{ICONS[ic]}" '
-                    f'fill="{logo_c}"/></g>'
-                )
-                inner += ICON + ICON_GAP
-            out.append(
-                f'<text x="{inner:.1f}" y="{by + BADGE_H/2 + 3.7:.1f}" '
-                f'fill="{tx}" font-size="{FS}" font-weight="500">{lbl}</text>'
-            )
-            x += bw + BADGE_GAP
-        y = by + BADGE_H + ROW_GAP
+    # title: gold sparkle + name + tracked subtitle
+    out.append(
+        f'<g transform="translate({L},19) scale({16/24:.4f})">'
+        f'<path d="{SPARKLE}" fill="{GOLD}"/></g>'
+    )
+    out.append(
+        f'<text x="{L+24}" y="35" fill="{INK}" font-size="{TITLE_FS}" '
+        f'font-weight="600">The Fleet</text>'
+    )
+    out.append(
+        f'<text x="{L+24}" y="51" fill="{INK_MUTED}" font-size="{SUB_FS}" '
+        f'font-weight="600" letter-spacing="1.4">'
+        f'FRAMEWORKS · AGENTS · RETIRED</text>'
+    )
 
-    H = int(round(y - ROW_GAP + PAD_BOTTOM))
+    for (name, retired, ckey, items, lines, widths), gtop, gh in \
+            zip(groups, group_tops, group_hs):
+        tile_fill = "url(#asTileR)" if retired else "url(#asTile)"
+        glyph_c = RTX if retired else GOLD
+        name_c = RTX if retired else INK
+        # left column: gem tile + category name, anchored to the first line so
+        # the row reads exactly like a model-fleet row; wrapped continuation
+        # lines below are graceful overflow (left + right whitespace).
+        tile_y = gtop
+        out.append(
+            f'<rect x="{L}" y="{tile_y:.1f}" width="{TILE}" height="{TILE}" '
+            f'rx="5" fill="{tile_fill}"/>'
+        )
+        out.append(
+            f'<rect x="{L+2}" y="{tile_y+1.5:.1f}" width="{TILE-4}" '
+            f'height="1" rx="0.5" fill="#FFFFFF" opacity="0.10"/>'
+        )
+        gg = (TILE - GLYPH) / 2
+        out.append(cat_glyph(ckey, L + gg, tile_y + gg, GLYPH, glyph_c))
+        out.append(
+            f'<text x="{NAME_X}" y="{tile_y + TILE/2 + 4.5:.1f}" '
+            f'fill="{name_c}" font-size="{NAME_FS}" '
+            f'font-weight="600">{name}</text>'
+        )
+
+        # right column: wrapped badge flow
+        for li, line in enumerate(lines):
+            by = gtop + li * (BADGE_H + WRAP_GAP)
+            cy = by + BADGE_H / 2
+            x = CHIP_X
+            for (lbl, ic), bw in line:
+                chip_fill = "url(#asChipR)" if retired else "url(#asChip)"
+                hi_op = "0.05" if retired else "0.10"
+                tx_c = RTX if retired else CHIP_TX
+                ic_c = RTX if retired else GOLD
+                out.append(
+                    f'<rect x="{x:.1f}" y="{by:.1f}" width="{bw:.1f}" '
+                    f'height="{BADGE_H}" rx="{RX}" fill="{chip_fill}"/>'
+                )
+                out.append(
+                    f'<rect x="{x+1.5:.1f}" y="{by+1.5:.1f}" '
+                    f'width="{bw-3:.1f}" height="1" rx="0.5" '
+                    f'fill="#FFFFFF" opacity="{hi_op}"/>'
+                )
+                inner = x + PAD_X
+                if ic:
+                    iy = by + (BADGE_H - ICON) / 2
+                    out.append(
+                        f'<g transform="translate({inner:.1f},{iy:.1f}) '
+                        f'scale({ICON/24:.4f})"><path d="{ICONS[ic]}" '
+                        f'fill="{ic_c}"/></g>'
+                    )
+                    inner += ICON + ICON_GAP
+                out.append(
+                    f'<text x="{inner:.1f}" y="{cy + 3.7:.1f}" fill="{tx_c}" '
+                    f'font-size="{FS}" font-weight="500">{lbl}</text>'
+                )
+                x += bw + BADGE_GAP
+            right = x - BADGE_GAP
+            # first line: dashed guide to the status pill (if room)
+            if li == 0:
+                sw = RETIRED_W if retired else LIVE_W
+                pill_x = STATUS_RIGHT - sw
+                g1, g2 = right + 8, pill_x - 8
+                if g2 - g1 >= GUIDE_MIN:
+                    out.append(
+                        f'<line x1="{g1:.1f}" y1="{cy:.1f}" x2="{g2:.1f}" '
+                        f'y2="{cy:.1f}" stroke="{INK_MUTED}" stroke-width="1" '
+                        f'stroke-dasharray="2 4" opacity="0.28"/>'
+                    )
+                out.append(status_pill(pill_x, by, retired))
+
     out.append("</svg>")
-    svg = "\n".join(out).replace("__H__", str(H))
-    return svg
+    return "\n".join(out)
 
 
 def main():
@@ -178,11 +389,17 @@ def main():
     add_backup_args(ap)
     args = ap.parse_args()
 
+    missing = [ic for *_r, items in ROWS for _l, ic in items
+               if ic and ic not in ICONS]
+    if missing:
+        sys.exit(f"no icon path for: {', '.join(sorted(set(missing)))}")
+
     svg = render()
     os.makedirs(os.path.dirname(args.out), exist_ok=True)
     with open(args.out, "w", encoding="utf-8", newline="\n") as f:
         f.write(svg + "\n")
-    print(f"wrote {args.out}")
+    n = sum(len(items) for *_r, items in ROWS)
+    print(f"wrote {args.out}: {len(ROWS)} categories, {n} badges")
     maybe_snapshot(args)
 
 
