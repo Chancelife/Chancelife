@@ -31,7 +31,7 @@
 </p>
 
 <p align="center">
-  <img src="./assets/agent-stack.svg" alt="The Fleet — Frameworks: LangChain, LangGraph, OpenAI SDK · Agents: Claude Code, Codex, Kimi Code, Cline, Pi, Druid, OpenClaw · Retired: Trae, Dify, Gemini CLI, Kimi CLI, n8n" />
+  <img src="./assets/agent-stack.svg" alt="The Fleet — Frameworks: LangChain, LangGraph, OpenAI SDK · Agents: Claude Code, Codex, Kimi Code, Cline, OpenCode, Pi, Druid, OpenClaw · Retired: Trae, Dify, Gemini CLI, Kimi CLI, n8n" />
 </p>
 
 <br/>

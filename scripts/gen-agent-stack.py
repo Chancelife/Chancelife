@@ -55,6 +55,7 @@ ROWS = [
         ("Codex", "openai"),
         ("Kimi Code", "kimi"),
         ("Cline", "cline"),
+        ("OpenCode", None),
         ("Pi", None),
         ("Druid", None),
         ("OpenClaw", None),
