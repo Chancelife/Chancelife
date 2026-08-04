@@ -3,6 +3,9 @@
 /_local/
 /drafts/
 
+# Timestamped copies made by scripts/_backup.py before each regen.
+/backup/
+
 # OS / editor cruft
 .DS_Store
 Thumbs.db
