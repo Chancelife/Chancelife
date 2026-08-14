@@ -61,9 +61,9 @@ ICONS = {
 # being onboarded; stable providers render with the normal LIVE status.
 PROVIDERS = [
     {"name": "Anthropic", "icon": "claude",
-     "models": ["Claude 5", "Claude 4.8", "Sonnet 5", "Sonnet 4.8"]},
+     "models": ["Opus 5", "Opus 4.8", "Sonnet 5", "Haiku 4.5"]},
     {"name": "OpenAI", "icon": "openai",
-     "models": ["GPT 5.6 Sol", "GPT 5.6 Terra", "GPT 5.5"]},
+     "models": ["GPT 5.6 Sol", "GPT 5.6 Terra", "GPT 5.6 Luna", "GPT 5.5"]},
     {"name": "Kimi", "icon": "kimi",
      "models": ["Kimi K3", "Kimi 2.7", "Kimi 2.7 High Speed"]},
     {"name": "Qwen", "icon": "qwen",
