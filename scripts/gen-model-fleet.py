@@ -69,7 +69,7 @@ PROVIDERS = [
     {"name": "Qwen", "icon": "qwen",
      "models": ["Qwen 3.7", "Qwen 3.8 Pro"]},
     {"name": "DeepSeek", "icon": "deepseek",
-     "models": ["V4 Fast", "V4 Pro"]},
+     "models": ["V4 Flash", "V4 Pro"]},
 ]
 
 # --- geometry ---------------------------------------------------------------
