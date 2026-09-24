@@ -77,6 +77,7 @@ ROWS = [
         ("Codex", "openai"),
         ("Kimi Code", "kimi"),
         ("Cline", "cline"),
+        ("Qoder", None),
         ("OpenCode", None),
         ("Pi", None),
         ("Druid", None),
