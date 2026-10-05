@@ -39,7 +39,7 @@
 <h3 align="center">🧠 Model Arsenal</h3>
 
 <p align="center">
-  <img src="./assets/model-fleet.svg" alt="Model Arsenal — Anthropic: Opus 5, Opus 4.8, Sonnet 5, Haiku 4.5 · OpenAI: GPT 5.6 Sol, GPT 5.6 Terra, GPT 5.6 Luna, GPT 5.5 · Kimi: Kimi K3, Kimi 2.7, Kimi 2.7 High Speed · Qwen: Qwen 3.7, Qwen 3.8 Pro · DeepSeek: V4 Flash, V4 Pro" />
+  <img src="./assets/model-fleet.svg" alt="Model Arsenal — Anthropic: Fable 5.1, Opus 5.5, Sonnet 5.5, Haiku 4.5 · OpenAI: GPT 6 Astra, GPT 6 Sol, GPT 6 Luna, GPT 5.5 · Kimi: Kimi K3, Kimi 2.7, Kimi 2.7 High Speed · Qwen: Qwen 3.8 Max, Qwen 3.8 Flash, Qwen 3.8 Omni Flash, Qwen 3.7 · DeepSeek: V4.1 Flash, V4 Pro" />
 </p>
 
 <br/>
@@ -51,7 +51,7 @@
 </p>
 
 <p align="center">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=Chancelife&hide_border=false&background=0A1633&border=1E2A54&stroke=1E2A54&ring=B7995B&fire=B7995B&currStreakNum=C7D0E8&currStreakLabel=B7995B&sideNums=C7D0E8&sideLabels=7A88B8&dates=7A88B8" alt="GitHub streak" />
+  <img src="./assets/streak-card.svg" alt="GitHub streak" />
 </p>
 
 <p align="center">

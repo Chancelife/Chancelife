@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Refresh all self-hosted profile cards in one go, under a single timestamp.
 
-Runs each generator (stats / weekly-contributions / agent-stack), which writes
+Runs each generator (stats / streak / weekly-contributions / agent-stack / model-fleet), which writes
 its SVG into assets/ AND drops a timestamped copy into backup/. Passing one
 shared --stamp means a single refresh lands as one coherent dated set in backup/,
 so you can browse `backup/*_2026-07-24_1450.svg` as "everything as of that run".
@@ -9,7 +9,7 @@ so you can browse `backup/*_2026-07-24_1450.svg` as "everything as of that run".
     python scripts/refresh-all.py                # refresh all, archive to backup/
     python scripts/refresh-all.py --no-backup    # refresh without archiving
 
-Requires: `gh auth login` (stats + weekly hit the GitHub GraphQL API).
+Requires: `gh auth login` (stats + streak + weekly hit the GitHub GraphQL API).
 """
 import argparse
 import datetime as dt
@@ -18,6 +18,7 @@ import sys
 
 GENERATORS = [
     "scripts/gen-stats-card.py",
+    "scripts/gen-streak-card.py",
     "scripts/gen-weekly-contrib.py",
     "scripts/gen-agent-stack.py",
     "scripts/gen-model-fleet.py",

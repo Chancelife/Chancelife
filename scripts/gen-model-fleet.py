@@ -61,15 +61,16 @@ ICONS = {
 # being onboarded; stable providers render with the normal LIVE status.
 PROVIDERS = [
     {"name": "Anthropic", "icon": "claude",
-     "models": ["Opus 5", "Opus 4.8", "Sonnet 5", "Haiku 4.5"]},
+     "models": ["Fable 5.1", "Opus 5.5", "Sonnet 5.5", "Haiku 4.5"]},
     {"name": "OpenAI", "icon": "openai",
-     "models": ["GPT 5.6 Sol", "GPT 5.6 Terra", "GPT 5.6 Luna", "GPT 5.5"]},
+     "models": ["GPT 6 Astra", "GPT 6 Sol", "GPT 6 Luna", "GPT 5.5"]},
     {"name": "Kimi", "icon": "kimi",
      "models": ["Kimi K3", "Kimi 2.7", "Kimi 2.7 High Speed"]},
     {"name": "Qwen", "icon": "qwen",
-     "models": ["Qwen 3.7", "Qwen 3.8 Pro"]},
+     "models": ["Qwen 3.8 Max", "Qwen 3.8 Flash", "Qwen 3.8 Omni Flash",
+                "Qwen 3.7"]},
     {"name": "DeepSeek", "icon": "deepseek",
-     "models": ["V4 Flash", "V4 Pro"]},
+     "models": ["V4.1 Flash", "V4 Pro"]},
 ]
 
 # --- geometry ---------------------------------------------------------------
